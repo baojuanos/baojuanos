@@ -21,7 +21,7 @@ mkdir -p $GRUB_DIR
 cp $KERNEL $BOOT_DIR
 
 cat > $GRUB_CFG <<EOF
-set timeout=1
+set timeout=0
 set default=0
 menuentry "Baojuan OS" {
   multiboot2 /boot/${KERNEL_BASENAME}

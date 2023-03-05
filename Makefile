@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-Wall -ffreestanding -g -Iinclude
+CFLAGS=-Wall -m64 -g -ffreestanding -Iinclude
 LINK_SCRIPT=scripts/kernel.ld
 MKISO_SCRIPT=scripts/mkiso.sh
 
@@ -9,9 +9,11 @@ ISO_DIR=$(TARGET_DIR)/iso
 ISO=$(TARGET_DIR)/baojuanos.iso
 
 asm_src=$(shell find arch -name *.S)
-asm_objs=$(patsubst %.S, %.o, $(asm_src))
+asm_obj=$(patsubst %.S, %.o, $(asm_src))
+c_src=$(shell find kernel -name *.c)
+c_obj=$(patsubst %.c, %.o, $(c_src))
 
-objects=$(asm_objs)
+objects=$(asm_obj) $(c_obj)
 
 kernel: $(objects)
 	ld -T $(LINK_SCRIPT) $(objects) -o $(KERNEL)
@@ -32,7 +34,7 @@ check_multiboot:
 	grub-file --is-x86-multiboot2 $(KERNEL)
 
 run: iso
-	qemu-system-x86_64 -boot d -cdrom $(ISO)
+	DISPLAY=:0 qemu-system-x86_64 -boot d -cdrom $(ISO) -monitor stdio
 
 clean:
 	rm -rf target/* $(objects)
