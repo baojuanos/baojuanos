@@ -89,17 +89,18 @@ gdt64_desc:
   .word . - gdt64 - 1
   .long gdt64
 
-.p2align 12
-pml4e:
-  .quad pdpte + 7
-  .fill 511, 8, 0
-pdpte:
-  .quad pde + 3
-  .fill 511, 8, 0
-pde:
-  .quad	0x000083
-	.quad	0x200083
-	.quad	0x400083
-	.quad	0x600083
-	.quad	0x800083
-  .fill 507, 8, 0
+// 临时页表设置移入 entry.c 文件，使用 c 语言重写，使结构更清晰
+// .p2align 12
+// pml4e:
+//   .quad pdpte + 7
+//   .fill 511, 8, 0
+// pdpte:
+//   .quad pde + 3
+//   .fill 511, 8, 0
+// pde:
+//   .quad	0x000083
+// 	.quad	0x200083
+// 	.quad	0x400083
+// 	.quad	0x600083
+// 	.quad	0x800083
+//   .fill 507, 8, 0
