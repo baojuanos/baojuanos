@@ -1,5 +1,7 @@
 #include <multiboot2.h>
 
+#define STACK_SIZE 0x4000 // 16KB
+
 .set header_hength, multiboot_header_end - multiboot_header
 .set checksum, -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT_ARCHITECTURE_I386 + header_hength)
 
@@ -73,6 +75,11 @@ movb $0x0b, 0xb8009
 movb $'4', 0xb800a
 movb $0x0b, 0xb800b
 
+// 初始化栈指针
+movq $(stack + STACK_SIZE), %rsp
+
+callq kernel_main
+
 hlt
 
 .section ".bsdata", "a"
@@ -104,3 +111,5 @@ gdt64_desc:
 // 	.quad	0x600083
 // 	.quad	0x800083
 //   .fill 507, 8, 0
+
+.comm stack, STACK_SIZE

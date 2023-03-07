@@ -6,11 +6,32 @@ SECTIONS
 
   .bstext :
   {
-    arch/x86_64/boot.o (.bstext)
+    * (.bstext)
   }
 
   .bsdata :
   {
-    arch/x86_64/boot.o (.bsdata)
+    * (.bsdata)
+  }
+
+  .text : 
+  {
+    * (.text)
+  }
+
+  .rodata :
+  {
+    * (.rodata)
+    * (.rodata.*)
+  }
+
+  .data :
+  {
+    * (.data)
+  }
+
+  .bss :
+  {
+    * (.bss)
   }
 }

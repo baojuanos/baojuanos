@@ -1,7 +1,10 @@
-typedef unsigned long long uint64_t;
+#include <types.h>
+
 typedef uint64_t pml4e_t;
 typedef uint64_t pdpte_t;
 typedef uint64_t pde_t;
+
+// clang-format off
 
 __attribute__((__aligned__(1 << 12)))
 __attribute__((section(".bsdata")))
@@ -28,3 +31,5 @@ pde_t pde[512] = {
     [3] = 0x600083,
     [4] = 0x800083,
 };
+
+// clang-format on
