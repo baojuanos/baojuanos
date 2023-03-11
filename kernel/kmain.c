@@ -1,6 +1,6 @@
 #include <types.h>
 
-uint16_t *video_buffer = (uint16_t *)0xb8000;
+uint16_t *video_buffer = (uint16_t *)(0xffff800000000000 + 0xb8000);
 
 void printf(const char *str) {
   for (int i = 0; str[i] != '\0'; i++) {
@@ -8,4 +8,10 @@ void printf(const char *str) {
   }
 }
 
-void kernel_main() { printf("Baojuan my voice!"); }
+void kernel_main() {
+  printf("Baojuan my voice!");
+
+  for (;;) {
+    ;
+  }
+}

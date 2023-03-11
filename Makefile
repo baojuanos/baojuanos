@@ -1,7 +1,9 @@
 CC=clang
+LD=ld.lld
 CFLAGS=-Wall -m64 -g -ffreestanding -Iinclude
 LINK_SCRIPT=scripts/kernel.ld
 MKISO_SCRIPT=scripts/mkiso.sh
+KERNEL_MAP=target/kernel.map
 
 TARGET_DIR=target
 KERNEL=$(TARGET_DIR)/kernel
@@ -16,7 +18,7 @@ c_obj=$(patsubst %.c, %.o, $(c_src))
 objects=$(asm_obj) $(c_obj)
 
 kernel: $(objects)
-	ld -T $(LINK_SCRIPT) $(objects) -o $(KERNEL)
+	$(LD) -T $(LINK_SCRIPT) $(objects) -o $(KERNEL) -M > $(KERNEL_MAP)
 	objdump -SD -Msuffix $(KERNEL) > $(KERNEL).asm
 
 %.o: %.c

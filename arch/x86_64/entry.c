@@ -7,17 +7,18 @@ typedef uint64_t pde_t;
 // clang-format off
 
 __attribute__((__aligned__(1 << 12)))
-__attribute__((section(".bsdata")))
+__attribute__((__section__(".bsdata")))
 pml4e_t pml4e[512];
 
-__attribute__((section(".bsdata")))
+__attribute__((__section__(".bsdata")))
 pdpte_t pdpte[512];
 
-__attribute__((section(".bsdata")))
+__attribute__((__section__(".bsdata")))
 pde_t pde[512];
 
 pml4e_t pml4e[512] = {
     [0] = (uint64_t)pdpte + 7,
+    [256] = (uint64_t)pdpte + 7,
 };
 
 pdpte_t pdpte[512] = {

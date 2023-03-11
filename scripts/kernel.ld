@@ -1,5 +1,7 @@
 ENTRY(_start)
 
+KERNEL_BASE = 0xffff800000000000;
+
 SECTIONS
 {
   . = 1M;
@@ -14,23 +16,29 @@ SECTIONS
     * (.bsdata)
   }
 
-  .text : 
+  . = ALIGN(4K);
+
+  _bs_end = .;
+
+  . += KERNEL_BASE;
+
+  .text : AT(_bs_end)
   {
     * (.text)
   }
 
-  .rodata :
+  .rodata : ALIGN(4K)
   {
     * (.rodata)
     * (.rodata.*)
   }
 
-  .data :
+  .data : ALIGN(4K)
   {
     * (.data)
   }
 
-  .bss :
+  .bss : ALIGN(4K)
   {
     * (.bss)
   }
