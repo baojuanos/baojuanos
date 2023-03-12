@@ -1,3 +1,4 @@
+#include <mmu.h>
 #include <types.h>
 
 uint16_t *video_buffer = (uint16_t *)(0xffff800000000000 + 0xb8000);
@@ -10,6 +11,8 @@ void printf(const char *str) {
 
 void kernel_main() {
   printf("Baojuan my voice!");
+
+  seginit();
 
   for (;;) {
     ;

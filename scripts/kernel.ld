@@ -16,13 +16,9 @@ SECTIONS
     * (.bsdata)
   }
 
-  . = ALIGN(4K);
-
-  _bs_end = .;
-
   . += KERNEL_BASE;
 
-  .text : AT(_bs_end)
+  .text : AT(ADDR(.text) - KERNEL_BASE) ALIGN(4K)
   {
     * (.text)
   }

@@ -6,8 +6,7 @@ typedef uint64_t pde_t;
 
 // clang-format off
 
-__attribute__((__aligned__(1 << 12)))
-__attribute__((__section__(".bsdata")))
+__attribute__((__section__(".bsdata"), __aligned__(1 << 12)))
 pml4e_t pml4e[512];
 
 __attribute__((__section__(".bsdata")))

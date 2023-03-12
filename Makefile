@@ -1,9 +1,8 @@
 CC=clang
 LD=ld.lld
-CFLAGS=-Wall -m64 -g -ffreestanding -Iinclude
+CFLAGS=-Wall -m64 -g -ffreestanding -Iinclude -I.
 LINK_SCRIPT=scripts/kernel.ld
 MKISO_SCRIPT=scripts/mkiso.sh
-KERNEL_MAP=target/kernel.map
 
 TARGET_DIR=target
 KERNEL=$(TARGET_DIR)/kernel
@@ -18,7 +17,7 @@ c_obj=$(patsubst %.c, %.o, $(c_src))
 objects=$(asm_obj) $(c_obj)
 
 kernel: $(objects)
-	$(LD) -T $(LINK_SCRIPT) $(objects) -o $(KERNEL) -M > $(KERNEL_MAP)
+	$(LD) -T $(LINK_SCRIPT) $(objects) -o $(KERNEL) -M > $(KERNEL).map
 	objdump -SD -Msuffix $(KERNEL) > $(KERNEL).asm
 
 %.o: %.c
@@ -27,13 +26,10 @@ kernel: $(objects)
 %.o: %.S
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: check_multiboot iso run clean
+.PHONY: iso run clean
 
 iso: kernel
 	sh $(MKISO_SCRIPT) $(KERNEL) $(ISO)
-
-check_multiboot:
-	grub-file --is-x86-multiboot2 $(KERNEL)
 
 run: iso
 	DISPLAY=:0 qemu-system-x86_64 -boot d -cdrom $(ISO) -monitor stdio

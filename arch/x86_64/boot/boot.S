@@ -3,16 +3,16 @@
 #define STACK_SIZE 0x4000 // 16KB
 
 .set header_hength, multiboot_header_end - multiboot_header
-.set checksum, -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT_ARCHITECTURE_I386 + header_hength)
+.set checksum, -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT2_ARCHITECTURE_I386 + header_hength)
 
 .global _start
 
 .section ".bstext", "ax"
 multiboot_header:
-.long MULTIBOOT2_HEADER_MAGIC     # magic
-.long MULTIBOOT_ARCHITECTURE_I386 # architecture, 32-bit (protected) mode of i386
-.long header_hength               # header length
-.long checksum                    # checksum
+.long MULTIBOOT2_HEADER_MAGIC       # magic
+.long MULTIBOOT2_ARCHITECTURE_I386  # architecture, 32-bit (protected) mode of i386
+.long header_hength                 # header length
+.long checksum                      # checksum
 
 multiboot_header_tag_end:
 .short 0
@@ -128,12 +128,9 @@ hlt
 .section ".bsdata", "a"
 .align 8
 gdt64:
-gdt64_null:
-  .quad 0x0000000000000000
-gdt64_code64:
-  .quad 0x0020980000000000
-gdt64_data64:
-  .quad 0x0000920000000000
+  .quad 0x0000000000000000 // null
+  .quad 0x0020980000000000 // code64
+  .quad 0x0000920000000000 // data64
 
 gdt64_desc:
   .word . - gdt64 - 1
