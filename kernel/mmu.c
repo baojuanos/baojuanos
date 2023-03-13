@@ -1,5 +1,5 @@
-#include <arch/x86_64/include/x86_64.h>
 #include <mmu.h>
+#include <x86_64.h>
 
 struct segdesc gdt[NSEGS];
 
