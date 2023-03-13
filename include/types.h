@@ -1,9 +1,7 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-typedef _Bool bool;
-
-enum { false, true };
+typedef enum bool { false, true } bool;
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
