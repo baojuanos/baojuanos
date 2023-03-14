@@ -1,6 +1,6 @@
 CC=clang
 LD=ld.lld
-CFLAGS=-Wall -m64 -g -ffreestanding -Iinclude -I.
+CFLAGS=-Wall -m64 -g -ffreestanding -fno-builtin -nostdinc -Iinclude -I.
 LINK_SCRIPT=scripts/kernel.ld
 MKISO_SCRIPT=scripts/mkiso.sh
 
