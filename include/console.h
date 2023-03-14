@@ -3,7 +3,26 @@
 
 #include <types.h>
 
-#define CRTPORT 0x3d4
+// CRT 显卡文本模式内存映射起始地址
+#define CRT_BUFFER_BASE 0xb8000
+
+// CRT 文本模式行数
+#define CRT_ROWS 25
+
+// CRT 文本模式列数
+#define CRT_COLUMNS 80
+
+// CRT 索引寄存器端口
+#define CRT_IC 0x3d4
+
+// CRT 数据寄存器端口
+#define CRT_DC 0x3d5
+
+// CRT 光标位置寄存器高 8 位索引值
+#define CRT_CURSOR_HIGH_HALF 0xe
+
+// CRT 光标位置寄存器低 8 位索引值
+#define CRT_CURSOR_LOW_HALF 0xf
 
 typedef enum console_color_t {
   black       = 0,
@@ -31,29 +50,8 @@ struct console_t {
   console_color_t backcolor;
 };
 
-static struct console_t console = {
-    .buffer    = (uint16_t *)(0xffff800000000000 + 0xb8000),
-    .pos       = 0,
-    .forecolor = white,
-    .backcolor = black,
-};
-
 void console_reset();
 
-void console_reset_pos();
-
-void console_set_pos(uint16_t pos);
-
-uint16_t console_get_pos();
-
-void console_clear();
-
-void console_write(char c);
-
-void console_set_color(console_color_t backcolor, console_color_t forecolor);
-
-void printk(const char *fmt);
-
-void printk_color(console_color_t backcolor, console_color_t forecolor, const char *fmt);
+void printk(const char *fmt, ...);
 
 #endif // __CONSOLE_H__

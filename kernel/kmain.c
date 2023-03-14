@@ -7,11 +7,13 @@ void kernel_main() {
 
   console_reset();
 
-  printk("Baojuan my voice!");
+  for (int i = 0; i < 25; i++) {
+    printk("Baojuan my voice! %d\n", i);
+  }
+  printk("Hello laoli.\n");
 
-  printk_color(light_gray, light_blue, "Hello laoli.");
-
-  console_set_color(green, brown);
+  printk("%d\n", 2023);
+  printk("0x%x\n", 1024);
 
   seginit();
   idtinit();
