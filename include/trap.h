@@ -26,6 +26,15 @@ struct gatedesc {
   uint32_t rsv0 : 32;
 };
 
+struct trapframe {
+  // 异常编号，vectors 中压栈
+  uint64_t trapno;
+
+  // 硬件压栈
+  // 错误码：如果是无错误码的中断则手动压栈一个 0，保持 trapframe 结构的一致
+  uint64_t err;
+};
+
 void setup_gatedesc(struct gatedesc *d, uint16_t cs, uint64_t offset, uint8_t type, uint8_t dpl);
 
 void idtinit();

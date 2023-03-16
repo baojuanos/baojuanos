@@ -9,7 +9,7 @@ KERNEL=$(TARGET_DIR)/kernel
 ISO_DIR=$(TARGET_DIR)/iso
 ISO=$(TARGET_DIR)/baojuanos.iso
 
-asm_src=$(shell find arch -name *.S)
+asm_src=$(shell find arch kernel -name *.S)
 asm_obj=$(patsubst %.S, %.o, $(asm_src))
 c_src=$(shell find arch kernel -name *.c)
 c_obj=$(patsubst %.c, %.o, $(c_src))

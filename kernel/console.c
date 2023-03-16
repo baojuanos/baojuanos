@@ -76,7 +76,7 @@ static void printint(int xx, int base, bool sign) {
 }
 
 static void console_clear() {
-  for (int i = 0; i < 80 * 25; i++) {
+  for (int i = 0; i < CRT_COLUMNS * CRT_ROWS; i++) {
     console_write(' ');
   }
 }
