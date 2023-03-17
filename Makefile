@@ -34,5 +34,8 @@ iso: kernel
 run: iso
 	DISPLAY=:0 qemu-system-x86_64 -boot d -cdrom $(ISO) -monitor stdio
 
+debug: iso
+	DISPLAY=:0 qemu-system-x86_64 -boot d -cdrom $(ISO) -monitor stdio -s -S
+
 clean:
 	rm -rf target/* $(objects)

@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Start Qemu",
+      "command": "make debug",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "qemu",
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "qemu",
+          "endsPattern": "qemu"
+        }
+      }
+    }
+  ]
+}
