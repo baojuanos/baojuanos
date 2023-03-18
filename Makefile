@@ -11,7 +11,7 @@ ISO=$(TARGET_DIR)/baojuanos.iso
 
 asm_src=$(shell find arch kernel -name *.S)
 asm_obj=$(patsubst %.S, %.o, $(asm_src))
-c_src=$(shell find arch kernel -name *.c)
+c_src=$(shell find arch kernel lib -name *.c)
 c_obj=$(patsubst %.c, %.o, $(c_src))
 
 objects=$(asm_obj) $(c_obj)

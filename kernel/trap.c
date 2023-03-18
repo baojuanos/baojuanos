@@ -21,7 +21,7 @@ void default_interrupt_handler() {
 
 // 中断处理入口
 void trap_dispatcher(struct trapframe *tf) {
-  printk("trapframe: trapno: %d err: %d\n", tf->trapno, tf->err);
+  printk("trapframe: 0x%p, trapno: %d err: %d\n", tf, tf->trapno, tf->err);
 }
 
 // 设置并加载 IDT

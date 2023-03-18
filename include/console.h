@@ -12,6 +12,8 @@
 // CRT 文本模式列数
 #define CRT_COLUMNS 80
 
+#define CRT_SIZE (CRT_ROWS * CRT_COLUMNS)
+
 // CRT 索引寄存器端口
 #define CRT_IC 0x3d4
 

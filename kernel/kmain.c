@@ -1,5 +1,6 @@
 #include <console.h>
 #include <mmu.h>
+#include <stddef.h>
 #include <trap.h>
 #include <types.h>
 
@@ -13,7 +14,10 @@ void kernel_main() {
   printk("Hello laoli.\n");
 
   printk("%d\n", 2023);
+  printk("%d\n", -2023);
   printk("0x%x\n", 1024);
+  printk("0x%x\n", 0xffffffffffffffff);
+  printk("null: %s\n", NULL);
 
   seginit();
   idtinit();

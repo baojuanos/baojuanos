@@ -1,6 +1,9 @@
 #include <console.h>
 #include <kernel.h>
 #include <stdarg.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <strings.h>
 #include <x86_64.h>
 
 static struct console_t console = {
@@ -34,11 +37,11 @@ static void console_write(char c) {
   }
 
   // 如果位置超出屏幕则将每行向上移动一行并将最后一行清空
-  if (pos >= CRT_COLUMNS * CRT_ROWS) {
+  if (pos >= CRT_SIZE) {
     for (int i = 0; i < CRT_COLUMNS * (CRT_ROWS - 1); i++) {
       console.buffer[i] = console.buffer[i + CRT_COLUMNS];
     }
-    for (int i = CRT_COLUMNS * (CRT_ROWS - 1); i < CRT_COLUMNS * CRT_ROWS; i++) {
+    for (int i = CRT_COLUMNS * (CRT_ROWS - 1); i < CRT_SIZE; i++) {
       console.buffer[i] = ' ' | attr;
     }
     pos = pos - CRT_COLUMNS;
@@ -48,35 +51,28 @@ static void console_write(char c) {
   console.buffer[pos] = ' ' | attr;
 }
 
-static void printint(int xx, int base, bool sign) {
-  static char digits[] = "0123456789abcdef";
-  char buf[16];
-  int i;
-  unsigned int x;
-
-  if (sign && (sign = xx < 0)) {
-    x = -xx;
-  } else {
-    x = xx;
-  }
-
-  i = 0;
-
-  do {
-    buf[i++] = digits[x % base];
-  } while ((x /= base) != 0);
-
-  if (sign) {
-    buf[i++] = '-';
-  }
-
-  while (--i >= 0) {
-    console_write(buf[i]);
+static void console_write_string(char *s) {
+  for (int i = 0; s[i] != '\0'; i++) {
+    console_write(s[i]);
   }
 }
 
+static void printint32(int32_t n, int radix) {
+  char buf[32];
+  bzero(buf, 32);
+  itoa(n, buf, radix);
+  console_write_string(buf);
+}
+
+static void printuint64(uint64_t n, int radix) {
+  char buf[32];
+  bzero(buf, 32);
+  ulltoa(n, buf, radix);
+  console_write_string(buf);
+}
+
 static void console_clear() {
-  for (int i = 0; i < CRT_COLUMNS * CRT_ROWS; i++) {
+  for (int i = 0; i < CRT_SIZE; i++) {
     console_write(' ');
   }
 }
@@ -107,17 +103,16 @@ void printk(const char *fmt, ...) {
 
     switch (c) {
       case 'd':
-        printint(va_arg(ap, int), 10, true);
+        printint32(va_arg(ap, int32_t), 10);
         break;
       case 'x':
       case 'p':
-        printint(va_arg(ap, int), 16, false);
+        printuint64(va_arg(ap, uint64_t), 16);
         break;
       case 's':
-        if ((s = va_arg(ap, char *)) == 0)
+        if ((s = va_arg(ap, char *)) == NULL)
           s = "(null)";
-        for (; *s; s++)
-          console_write(*s);
+        console_write_string(s);
         break;
       case '%':
         console_write('%');
