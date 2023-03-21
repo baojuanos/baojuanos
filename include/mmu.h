@@ -8,7 +8,7 @@
 #define SEG_KDATA 2 // 内核数据+堆栈段
 #define SEG_UCODE 3 // 用户代码段
 #define SEG_UDATA 4 // 用户数据+堆栈段
-#define SEG_TSS 5   // 任务状态段
+#define SEG_TSS   5 // 任务状态段
 
 // 段数量
 #define NSEGS 6

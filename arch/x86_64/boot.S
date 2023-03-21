@@ -1,4 +1,5 @@
 #include <multiboot2.h>
+#include <kernel.h>
 
 #define STACK_SIZE 0x4000 // 16KB
 
@@ -23,6 +24,13 @@ multiboot_header_end:
 .code32
 _start:
 cli
+
+// multiboot 引导到内核入口点时
+// eax 寄存器的值为魔数 0x36d76289
+// ebx 寄存器的值为 multiboot 信息结构的地址
+// 这里先将这两个寄存器的值保存起来，以免数据被覆盖
+movl %eax, mbi_magic
+movl %ebx, mbi_addr
 
 movb $'3', 0xb8000
 movb $0x0a, 0xb8001
@@ -112,6 +120,21 @@ movabsq $(stack + STACK_SIZE), %rsp
 //  d1:   f4                      hlt
 // ...
 // 可以看到 stack 和 kernel_main 的重定位类型已经变为 R_X86_64_64
+
+// 将内核在高地址空间的基地址存入 r15 寄存器备用
+movq $KERNEL_BASE, %r15
+
+// 将 mbi_magic 和 mbi_addr 传给内核主函数
+movq mbi_magic, %rdi
+movq mbi_addr, %rsi
+// 将 mbi_addr 转为高地址空间地址
+addq %r15, %rsi
+
+// 将返回地址压栈，模拟 call 调用
+movabsq $kernel_return_point, %rax
+addq %r15, %rax
+pushq %rax
+
 movabsq $kernel_main, %rax
 jmpq *%rax
 
@@ -123,6 +146,7 @@ jmpq *%rax
 
 // callq 0xffff800000105060
 
+kernel_return_point:
 hlt
 
 .section ".bsdata", "a"
@@ -135,6 +159,11 @@ gdt64:
 gdt64_desc:
   .word . - gdt64 - 1
   .long gdt64
+
+mbi_magic:
+  .long 0
+mbi_addr:
+  .long 0
 
 // 临时页表设置移入 entry.c 文件，使用 c 语言重写，使结构更清晰
 // .p2align 12
