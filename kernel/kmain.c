@@ -1,4 +1,5 @@
 #include <console.h>
+#include <kernel.h>
 #include <mmu.h>
 #include <multiboot2.h>
 #include <stddef.h>
@@ -14,19 +15,24 @@ void kernel_main(uint32_t mbi_magic, uint64_t mbi_addr) {
     return;
   }
 
-  printk("mbi addr: 0x%p\n", mbi_addr);
+  printk("mbi addr: 0x%p\n\n", mbi_addr);
 
   if (mbi_addr & 7) {
     printk("unaligned mbi\n");
     return;
   }
 
+  printk("kernel:\n");
+  printk(" &etext = 0x%x\n", &etext);
+  printk(" &edata = 0x%x\n", &edata);
+  printk(" &end   = 0x%x\n\n", &end);
+
   for (struct multiboot_tag_t *tag = (struct multiboot_tag_t *)(mbi_addr + 8);
        tag->type != MULTIBOOT_TAG_TYPE_END;
        tag = (struct multiboot_tag_t *)((uint8_t *)tag + ((tag->size + 7) & ~7))) {
 
-    printk("Tag type: 0x%x, size: 0x%x, name: %s\n", tag->type, tag->size,
-           multiboot_tag_type_desc[tag->type]);
+    // printk("Tag type: 0x%x, size: 0x%x, name: %s\n", tag->type, tag->size,
+    //        multiboot_tag_type_desc[tag->type]);
 
     if (tag->type != MULTIBOOT_TAG_TYPE_MMAP) {
       continue;
@@ -46,5 +52,5 @@ void kernel_main(uint32_t mbi_magic, uint64_t mbi_addr) {
   seginit();
   idtinit();
 
-  asm volatile("int $64");
+  // asm volatile("int $64");
 }

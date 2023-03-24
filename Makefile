@@ -9,6 +9,9 @@ KERNEL=$(TARGET_DIR)/kernel
 ISO_DIR=$(TARGET_DIR)/iso
 ISO=$(TARGET_DIR)/baojuanos.iso
 
+QEMU=qemu-system-x86_64
+QEMU_OPTS=-boot d -cdrom $(ISO) -monitor stdio
+
 asm_src=$(shell find arch kernel -name *.S)
 asm_obj=$(patsubst %.S, %.o, $(asm_src))
 c_src=$(shell find arch kernel lib -name *.c)
@@ -32,10 +35,10 @@ iso: kernel
 	sh $(MKISO_SCRIPT) $(KERNEL) $(ISO)
 
 run: iso
-	DISPLAY=:0 qemu-system-x86_64 -boot d -cdrom $(ISO) -monitor stdio
+	DISPLAY=:0 $(QEMU) $(QEMU_OPTS)
 
 debug: iso
-	DISPLAY=:0 qemu-system-x86_64 -boot d -cdrom $(ISO) -monitor stdio -s -S
+	DISPLAY=:0 $(QEMU) $(QEMU_OPTS) -s -S
 
 clean:
 	rm -rf target/* $(objects)

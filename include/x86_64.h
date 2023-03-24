@@ -3,13 +3,15 @@
 
 #include <types.h>
 
-static inline uint8_t inb(uint16_t port) {
+#define __force_inline inline __attribute__((__always_inline__))
+
+static __force_inline uint8_t inb(uint16_t port) {
   uint8_t data;
   asm volatile("inb %1, %0" : "=a"(data) : "d"(port));
   return data;
 }
 
-static inline void outb(uint16_t port, uint8_t data) {
+static __force_inline void outb(uint16_t port, uint8_t data) {
   asm volatile("outb %0, %1" ::"a"(data), "d"(port));
 }
 
@@ -21,7 +23,7 @@ struct pseudo_desc {
 
 struct segdesc;
 
-static inline void lgdt(struct segdesc *p, uint16_t size) {
+static __force_inline void lgdt(struct segdesc *p, uint16_t size) {
 
   struct pseudo_desc pd = {
       .limit = size - 1,
@@ -33,7 +35,7 @@ static inline void lgdt(struct segdesc *p, uint16_t size) {
 
 struct gatedesc;
 
-static inline void lidt(struct gatedesc *p, uint16_t size) {
+static __force_inline void lidt(struct gatedesc *p, uint16_t size) {
 
   struct pseudo_desc pd = {
       .limit = size - 1,

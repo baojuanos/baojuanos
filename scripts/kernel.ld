@@ -23,6 +23,9 @@ SECTIONS
     * (.text)
   }
 
+  /* PROVIDE 指令用于在给定的位置定义一个符号 */
+  PROVIDE(etext = .);
+
   .rodata : ALIGN(4K)
   {
     * (.rodata)
@@ -34,8 +37,12 @@ SECTIONS
     * (.data)
   }
 
+  PROVIDE(edata = .);
+
   .bss : ALIGN(4K)
   {
     * (.bss)
   }
+
+  PROVIDE(end = .);
 }
